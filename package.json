@@ -55,7 +55,7 @@
         "jstorage": "^0.4.8",
         "lz-string": "^1.4.4",
         "moment": "^2.23.0",
-        "papaparse": "^4.6.3",
+        "papaparse": "^5.2.0",
         "vistorian-core": "file:../vistorian-core",
         "vistorian-bookmarkbrowser": "file:../vistorian-bookmarkbrowser",
         "vistorian-dynamicego": "file:../vistorian-dynamicego",
