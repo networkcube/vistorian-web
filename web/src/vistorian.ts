@@ -142,12 +142,16 @@ export function loadCSV(files: File[], callBack: Function, sessionid: string) {
             }
             var i: number = readers.indexOf((<FileReader>f.target));
             fileContents[i] = obj;
-            var content: any = fileContents[i].content.replace(', "', ',"').replace('" ,', '",')
-            table = new VTable(
-                // eliminate spaces in the name because they will 
-                // interfere with creating html element ids
-                // clean ', "'
-                files[i].name.replace('.csv', '').replace(/\s/g, '_').trim(),
+            var content: any = fileContents[i].content.replace(', "', ',"').replace('" ,', '",');
+
+            // spaces or periods would interfere with creating html element ids
+            var cleanName = files[i].name
+                .replace('.csv', '')
+                .replace(/[\s\.]/g, '_')
+                .trim();
+
+            var table = new VTable(
+                cleanName,
                 Papa.parse(content,
                     // {
                     //     // quotes: true,
