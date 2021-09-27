@@ -638,7 +638,15 @@ function deleteCurrentNetworkBookmarks(){
 
 //Show support request form on error occurance
 function sendSupportRequestForm(){
-  //
+  
+    var emailProvided = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+    if (!emailProvided.test(document.getElementById('userEmail').value)){
+        document.getElementById('lbl_emailAlert').style.display="block";
+        return;
+    }
+
     message="Thank you for submitting support request form. In the meantime, please refresh the current page and try again what you had in mind. We are working on your issue. Apologies and thank you very much for reporting.";
   
     var emailParam= {

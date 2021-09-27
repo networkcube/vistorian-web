@@ -3,7 +3,15 @@
 <html>
     <head>
   
+      <script type="text/javascript">
+        function checkEmail(){
+          if (document.getElementById("userEmail").value !="")
+              document.getElementById("lbl_emailAlert").style.display="none";
+          else
+              document.getElementById("lbl_emailAlert").style.display="block";
 
+        }
+      </script>
 
     </head>
     <body >
@@ -302,9 +310,11 @@
                   <label style="font-size: 16px;font-weight: bold;" id="lbl_vistorianLabStatus">Vistorian Lab Status :  </label> 
                   <input style="font-size: 16px;width:50%" type="text" disabled="true" id="txt_vistorianLabStatus"> 
 
-                  <label style="font-size: 16px;" >If you wish us to get back to you on the issue(s) submitted, please fill in your email.</label>
-                  <label style="font-size: 16px;font-weight: bold;" for="email" >Enter your email (optional):</label>
-                  <input style="font-size: 16px;width:50%" type="email" id="userEmail" name="email">
+                  <label id="lbl_emailAlert" style="font-size: 16px;font-weight: bold; display:none;color: red;" >No email was entered. If you wish us to get back to you on the issue(s) submitted, please fill in your email.</label>
+                  <label style="font-size: 16px;font-weight: bold;" for="email" >Please enter your email to assist you:</label>
+
+
+                  <input style="font-size: 16px;width:50%" type="email" id="userEmail" name="email" required onchange="checkEmail()">
             </p>
               
             <div id="errorDescriptionByUser" >
