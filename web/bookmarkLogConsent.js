@@ -564,7 +564,7 @@ window.addEventListener('beforeunload', (event) => {
       bkFrameDoc=(bkFrame.contentDocument || bkFrame.contentWindow.document);
   else
       bkFrameDoc=document;
-  var statusText=  bkFrameDoc.getElementById('lbl_changesState').innerText;
+  var statusText=  bkFrameDoc.getElementById('lbl_changesState').innerText || "";
 
   if (statusText=="Changes have not been saved yet. Click Save button"){
     event.returnValue = "Are you sure you want to leave?";
