@@ -19,12 +19,41 @@
     <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-   
+    <link rel="stylesheet" href="web/bookmarkLogConsent.css">
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src='web/bookmarkLogConsent.js'></script>
+
+    <script async src="https://api.countapi.xyz/hit/vistorian.online/e898e585-ec25-4479-bed6-61383fb3a90d"></script>
+  <script>
+       function acceptConsent(showToUser){
+            // To display consent form upon user's landing on the dataview page.
+            var urlTxt=window.location.pathname;
+            urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
+            var landingConsentForm = document.getElementById("onLoadConsentForm"); 
+            
+            if (showToUser){
+                    var doneConsent = (parseInt(localStorage.getItem('VistorianTour')) == 0);
+                    if (doneConsent)
+                        return ;
+                    landingConsentForm.style.display = "block";
+            }
+            else{
+                landingConsentForm.style.display = "none"; 
+                localStorage.setItem("acceptLogging", "true");
+                trace.event('log_9', 'start logging', 'webpage', urlTxt);   
+            }
+        }
+        function updateConsentPref(){
+            if ((document.getElementById('chk_dontShowLandingConsent').checked))
+                localStorage.setItem('VistorianTour', '0');
+        }
+   </script>
 </head>
 
-<body onload="trace.event('log_2', 'index', 'webpage', 'load')"> 
+<body onload="acceptConsent(true);trace.event('log_2', 'index', 'webpage', 'load')"> 
     <!-- VS: Call to trace_test_130529 -->
-    <script type="text/javascript" src="./static/traces/trace_test_130529.js"></script>
     <script src="./node_modules/jquery/dist/jquery.js" type="text/javascript"></script>
 
     <div id="main">
@@ -89,7 +118,7 @@
                 </li>
                 
                 <li>
-                    <a href="https://vistorian.github.io/vistorianLab.html" class="menuicon" onclick="trace.event('com_2', 'index', 'vistorinaLab study', 'click')"><img src="./static/logos/VistorianLab.png"
+                    <a href="https://vistorian.github.io/vistorianLab.html" target="_blank"  class="menuicon" onclick="trace.event('com_2', 'index', 'vistorinaLab study', 'click')"><img src="./static/logos/VistorianLab.png"
                             class="menuicon" />Vistorian Lab</a>
                 </li>
                 <li>
@@ -289,7 +318,8 @@
                     <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a>
                 </div>
             </p>
-            <a class="footer" href="mailto:networkcube@microsoft.com" target="_top">Contact Us</a> |
+            <a class="footer" href="mailto:networkcube@microsoft.com" target="_top">Contact Us</a> 
+            <!-- networkcube@microsoft.com -->
             <a class="footer" href="https://go.microsoft.com/fwlink/?LinkId=521839" title="privacy">Privacy &
                 Cookies</a> |
             <a class="footer" href="https://go.microsoft.com/fwlink/?LinkID=760869" title="terms of use">Terms Of
@@ -327,4 +357,42 @@
                     });
 
             </script>
+
+<div class="container">
+            
+    <!-- Consent Modal -->
+    <div class="modal" id="onLoadConsentForm">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+        
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h3 class="modal-title" style="color:#FF7F50;">Anonymous Activity Logging for Research Purposes</h3>
+            <button type="button" class="close" data-dismiss="modal" onclick="acceptConsent(false);">×</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body" style="text-align: justify;font-size: 18px;">
+        <p ><span>The Vistorian is a research prototype to build better visualizations for multivariate networks.</span></p>
+        <p ><span>By using The Vistorian, you agree that your interactions with the tool are being anonymously logged for research purposes at the University of Edinburgh. We will not log any information related to your data or browser settings. No cookies or third party software will be installed. For more information, please see <a href="https://vistorian.github.io/studyPhase1_activityLogging.html" target="_blank">here</a>.</span></p>
+        </div>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+             <label for="chk_dontShowConsent">  <input type="checkbox" id="chk_dontShowLandingConsent" onclick="updateConsentPref()"> Don't show consent form again.</label>
+
+            <a href="/static/logging_consent/Vistorian Tracing Consent form .pdf" download> <button type="button" class="btn btn-link" onclick="trace.event('log_7', 'consent', 'downloaded', document.location.pathname);">Download this Consent Form for your records</button></a>
+  
+            <div >  
+            <button type="button" class="btn btn-danger" style="align-items:center;width:200px;" data-dismiss="modal" onclick="acceptConsent(false);turnOnLogging()">OK</button>
+            </div>
+                
+                
+        </div>
+        
+        
+    </div>
+    </div>
+    
+  </div>
+  </div>
 </body>

@@ -1,7 +1,3 @@
-window.onload = (event) => {
-  console.log('page is fully loaded');
-};
-                
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (document.getElementById(elmnt.id + "header")) {
@@ -41,31 +37,34 @@ function dragElement(elmnt) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
-}
 
+}
 function turnLoggingOff(){
     var urlTxt=window.location.pathname;
     urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
 
     localStorage.setItem("acceptLogging", "false");
-    trace.event('log_10', 'stop logging', 'webpage', urlTxt);
+    trace.event('log_10', 'VistorianLab', 'OFF', urlTxt);
     var checkBox = document.getElementById("consentOnoffswitch");
     checkBox.checked=false;
     var bookmarksTool = document.getElementById("mydiv");
-    document.getElementById('myModal').style.display = "none";
+    //document.getElementById('myModal').style.display = "none";
     bookmarksTool.style.display = "none";
     var feedbackButton=document.querySelectorAll(".feedback a")[0];
     if (feedbackButton)
-        feedbackButton.style.display = "none";  
+        feedbackButton.style.display = "none";
+    // To be activaited upon optional logging  
+   // deactivateActivityTracker()
 
 }
 
 function turnOnLogging(){
    var urlTxt=window.location.pathname;
     urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
-
+    // To be deactivaited upon optional logging
+    //  activateActivityTracker();
     localStorage.setItem("acceptLogging", "true");
-    trace.event('log_9', 'start logging', 'webpage', urlTxt);
+    trace.event('log_9', 'VistorianLab', 'ON', urlTxt);
     var bookmarksTool = document.getElementById("mydiv"); 
     if (bookmarksTool)
         bookmarksTool.style.display = "block";
@@ -76,11 +75,9 @@ function turnOnLogging(){
       minimizeBookmarks();
     else
       maxmizeBookmarks();
-    var mdl=document.getElementById('myModal');
-    if (mdl)    
-      mdl.style.display = "none";
-
-    
+    //var mdl=document.getElementById('myModal');
+    //if (mdl)    
+      //mdl.style.display = "none";    
 }
 
 function checkLogStatus(){
@@ -91,7 +88,9 @@ function checkLogStatus(){
         turnOnLogging();
     }
 }
+
 var toolbarMHeight,toolbarMWidth,toolbarTop,toolbarLeft,bookmarkMinimized=false;
+
 function minimizeBookmarks(){
   var parentUrlTxt=window.parent.location.pathname;
   parentUrlTxt=parentUrlTxt.substring(parentUrlTxt.lastIndexOf("/")+1,parentUrlTxt.indexOf("."));
@@ -135,13 +134,14 @@ function toggleConsntModel(){
   parentUrlTxt=parentUrlTxt.substring(parentUrlTxt.lastIndexOf("/")+1,parentUrlTxt.indexOf("."));
 
   if (document.getElementById('consentOnoffswitch').checked){
-    if (document.getElementById('chk_dontShowConsent').checked)
+    //if (document.getElementById('chk_dontShowConsent').checked)
       turnOnLogging();
-    else{
-        document.getElementById('myModal').style.display = "block";
-        trace.event('log_5', ' Consent Form ', 'Displayed', parentUrlTxt);
+      
+   // else{
+        //document.getElementById('myModal').style.display = "block";
+        //trace.event('log_5', ' Consent Form ', 'Displayed', parentUrlTxt);
 
-    }
+   // }
   }
   else
     turnLoggingOff();
@@ -189,10 +189,8 @@ const INACTIVE_USER_TIME_THRESHOLD = 300000; //300000 = 5 minutes
 // const USER_ACTIVITY_THROTTLER_TIME = 120000 ; // 60000= 1 minute throttler
 
 let userActivityTimeout = null;
-// let userActivityThrottlerTimeout = null;
-// let isInactive = false;
 
-activateActivityTracker();
+
 
 
 //register the interactions' events with the function responsible
@@ -210,6 +208,9 @@ function activateActivityTracker() {
 }
 
 
+//turn it on for all users upon arrival
+activateActivityTracker();
+
 function  deactivateActivityTracker() {
   window.removeEventListener("mousemove", userActivityTracker);
   window.removeEventListener("mousedown", userActivityTracker);
@@ -226,7 +227,7 @@ function userActivityTracker(){
 }
 
 function checkDispalyOfInactivity(){
-  var nowTime=new Date();
+  var nowTime=new Date().getTime();
   var lastLoggedActvityTime=localStorage.getItem("userInactivityloggedTime");
   if (nowTime-lastLoggedActvityTime>=INACTIVE_USER_TIME_THRESHOLD)
     inactiveUserAction();
@@ -281,17 +282,7 @@ function inactiveUserAction() {
 
 
 function disablingFeedbackPopup(){
-  /* if (chk.checked)
-    localStorage.setItem("stopFeedbackPopup", "true");
-   
 
-  if (localStorage.getItem("stopFeedbackPopup")){
-    clearTimeout(userActivityTimeout);
-    clearTimeout(userActivityThrottlerTimeout);
-    deactivateActivityTracker();
-  }
-  else*/
- // userActivityThrottler();
 
   resetFeedbackForm();
 }
@@ -320,16 +311,6 @@ function LoggingGeneralFeedback(){
 
   var urlTxt=window.location.pathname;
   urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
-
-  let tempLog=false;
-
-  //check if the logging enabled, otherwise turn it temporarlly on for logging feedback
-  if (Boolean(localStorage.getItem("acceptLogging"))==false)
-      tempLog=true;
-
-  if (tempLog)
-    localStorage.setItem("acceptLogging", "true");
-
     let btns=document.getElementsByClassName('menuButtonGadget');
     for (var i=0;i<btns.length;i++)
       //Set main type of usage
@@ -339,12 +320,6 @@ function LoggingGeneralFeedback(){
         
         //add general feedback
         trace.event('log_15', 'General feedback', document.getElementById('feedback_text').value, urlTxt);
-      
-
-
-
-  if (tempLog)
-    localStorage.setItem("acceptLogging", "false");
 
 }
 
@@ -354,16 +329,6 @@ function LoggingGeneralFeedback(){
 function LoggingFeedback(){
   var urlTxt=window.location.pathname;
   urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
-
-
-  let tempLog=false;
-
-  //check if the logging enabled, otherwise turn it temporarlly on for logging feedback
-  if (Boolean(localStorage.getItem("acceptLogging"))==false)
-      tempLog=true;
-
-  if (tempLog)
-    localStorage.setItem("acceptLogging", "true");
 
     let btns=document.getElementsByClassName('feedbackMenuButton');
     for (var i=0;i<btns.length;i++){
@@ -379,22 +344,17 @@ function LoggingFeedback(){
           }
         }
         
-        //check if type was other
         if (btns[i].value=="Other")
           trace.event('bkm_3', ' bookmark type specified', 'Other: ' + document.getElementById('txt_other_timeout').value, urlTxt);
        }
-        //No general feedback
-       // trace.event('log_15', 'feedback_popup', document.getElementById('feedback_text_popup').value, urlTxt);
       }
 
-
-
-  if (tempLog)
-    localStorage.setItem("acceptLogging", "false");
     document.getElementById('timeoutPopupForm').style.display="none";
 
 
 }
+
+
 
 function resetFeedbackForm(){
   let btns=document.getElementsByClassName('feedbackMenuButton');
@@ -413,6 +373,21 @@ function resetFeedbackForm(){
 
   document.getElementById('popupFeedbackForm').style.display="none";
   
+}
+
+function resetSupportRequestFeedbackForm(msg){
+
+  
+  var urlTxt=window.location.pathname;
+  urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
+  document.getElementById("userEmail").value="";
+  document.getElementById("txt_errorDescriptionByUser").value="";
+  document.getElementById('errorFeedbackFormModel').style.display="none";
+  if (msg=='cancel')
+    trace.event('log_18', 'Support Request Form', 'Canceled', urlTxt);
+  else
+    trace.event('log_17', 'Support Request Form', 'Submiited', urlTxt);
+
 }
 
 function resetTimeOutFeedbackForm(){
@@ -583,19 +558,57 @@ window.onblur=(function(){
 });
 
 window.addEventListener('beforeunload', (event) => {
-  
-
   var bkFrame=document.getElementById("myFrame");
   var bkFrameDoc;
   if (bkFrame)
       bkFrameDoc=(bkFrame.contentDocument || bkFrame.contentWindow.document);
   else
       bkFrameDoc=document;
-  var statusText=  bkFrameDoc.getElementById('lbl_changesState').innerText;
+  var statusText=  bkFrameDoc.getElementById('lbl_changesState').innerText || "";
 
   if (statusText=="Changes have not been saved yet. Click Save button"){
     event.returnValue = "Are you sure you want to leave?";
   }
+});
+
+const ErrorFormTrigger=3;
+
+window.addEventListener('error', (event) => {
+  //log error
+  //trace.event('err', event + ' ' + source + lineno, error, document.location.pathname);
+
+  // Get Page Name
+  var urlTxt=window.location.pathname;
+  urlTxt=urlTxt.substring(urlTxt.lastIndexOf("/")+1,urlTxt.indexOf("."));
+
+  // Store errors list
+  var errorsList= JSON.parse((localStorage.getItem("vistorianErrorsList") || "[]"));
+  var errorOccured={'event':event.message, 'source':event.filename, 'lineno':event.lineno,'error':event.error, 'page':urlTxt};
+  errorsList.push(errorOccured);
+  localStorage.setItem("vistorianErrorsList",JSON.stringify(errorsList));
+
+  //Check number of error to show Support Request Form
+  var errorCounter= parseInt((localStorage.getItem("vistorianErrorsCounter") || "0"));
+  errorCounter++;
+  if  (errorCounter<ErrorFormTrigger){
+    localStorage.setItem("vistorianErrorsCounter",errorCounter);
+  }
+  else{
+      document.getElementById('txt_sessionID_errorForm').value= (localStorage.getItem('SessionLogId') || "None - [VistorianLab Status (off)]");
+      document.getElementById('txt_errorsList').value=(localStorage.getItem('vistorianErrorsList') || "");
+      var visLabStatus;
+      if (localStorage.getItem("acceptLogging")==="true")
+          visLabStatus="On";
+      else
+          visLabStatus="Off";
+    
+      document.getElementById('txt_vistorianLabStatus').value= visLabStatus;
+      document.getElementById('errorFeedbackFormModel').style.display = "block";
+      trace.event('log_17', ' Support Request Form ', 'Displayed', urlTxt);
+      localStorage.setItem("vistorianErrorsCounter",0);
+  }
+
+
 });
 
 function deleteCurrentNetworkBookmarks(){
@@ -620,4 +633,34 @@ function deleteCurrentNetworkBookmarks(){
     }
   
   }
+}
+
+
+//Show support request form on error occurance
+function sendSupportRequestForm(){
+  
+    var emailProvided = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+    if (!emailProvided.test(document.getElementById('userEmail').value)){
+        document.getElementById('lbl_emailAlert').style.display="block";
+        return;
+    }
+
+    message="Thank you for submitting support request form. In the meantime, please refresh the current page and try again what you had in mind. We are working on your issue. Apologies and thank you very much for reporting.";
+  
+    var emailParam= {
+      sessionID: document.getElementById('txt_sessionID_errorForm').value,
+      vistorianLabStatus: document.getElementById('txt_vistorianLabStatus').value,
+      email: document.getElementById('userEmail').value,
+      issueDescription: document.getElementById('txt_errorDescriptionByUser').value,
+      errorsList: document.getElementById('txt_errorsList').value
+    }
+
+    emailjs.send('service_jwbha6x', 'template_j7at6tq', emailParam)
+    .then(function(res){
+        console.log("Succes ",res.status);
+
+    });
+    resetSupportRequestFeedbackForm('confirm');
 }
