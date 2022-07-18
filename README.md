@@ -1,3 +1,6 @@
+> **Note**
+> The latest code for the Vistorian project is now kept in the [vistorian-monorepo](https://github.com/networkcube/vistorian-monorepo) repository.
+
 # Vistorian-web
 
 This repository contains html and styling files for the main Vistorian application.
